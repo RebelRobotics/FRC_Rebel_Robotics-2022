@@ -1,12 +1,13 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 
 
@@ -31,8 +32,11 @@ public class robotMap {
     public static double Rrpm = Rvelocity*10*60/2048;
     public static double LPos = 0;
     public static double Rpos = 0;
-  
-  public static CANSparkMax neo = new CANSparkMax(5, MotorType.kBrushless);
+  public static final TalonFX shooter = new TalonFX(6);
+  public static CANSparkMax feeder = new CANSparkMax(5, MotorType.kBrushless);
+
+  public static DoubleSolenoid hood = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+  //public static DoubleSolenoid hood = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
   static void autoInit(boolean debug) {
     CONST.autoFirstTime = true;

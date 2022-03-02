@@ -7,10 +7,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import org.ejml.data.CMatrix;
+
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.goStraight;
 
-
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import frc.robot.commands.*;
 
 
@@ -31,7 +35,10 @@ public class Robot extends TimedRobot {
     choose.addOption("route one", route1);
     choose.addOption("route two", route2);
     SmartDashboard.putData(choose);
+    CameraServer.startAutomaticCapture();
+    CameraServer.getVideo().getSource().setVideoMode(PixelFormat.kMJPEG, 320, 240, 24);
   }
+
 
   @Override
   public void robotPeriodic() {
@@ -62,8 +69,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     drive.driveMethod();
     
-    robotMap.neo.set(1);
-    System.out.println("encoders = " + robotMap.neo.getEncoder().getVelocity());
+    robotMap.feeder.set(1);
+    System.out.println("encoders = " + robotMap.feeder.getEncoder().getVelocity());
     
 
   }
