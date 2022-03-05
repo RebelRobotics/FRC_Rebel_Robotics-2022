@@ -9,7 +9,7 @@ public class drive {
     static double power = robotMap.joystick.getRawAxis(1);
     static double turn = robotMap.joystick.getRawAxis(2);
     static double slider = robotMap.joystick.getRawAxis(3);
-    static double slider2 = robotMap.joystick2.getRawAxis(3);
+    public static double slider2 = robotMap.joystick2.getRawAxis(3);
     static double motor_power = (slider+1)/2;
     static double turn_power = (slider2+1)/2;
 

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -16,7 +17,7 @@ public class robotMap {
   
   public static final Joystick joystick = new Joystick(1);
   public static final Joystick joystick2 = new Joystick(0);
-
+  
  
   public static final ADIS16470_IMU imu = new ADIS16470_IMU();
  
@@ -32,19 +33,22 @@ public class robotMap {
     public static double Rrpm = Rvelocity*10*60/2048;
     public static double LPos = 0;
     public static double Rpos = 0;
-  public static final TalonFX shooter = new TalonFX(6);
+  public static final TalonFX shooter = new TalonFX(8);
   public static CANSparkMax feeder = new CANSparkMax(5, MotorType.kBrushless);
 
   public static DoubleSolenoid hood = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
   //public static DoubleSolenoid hood = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
   static void autoInit(boolean debug) {
-    CONST.autoFirstTime = true;
+    // ZERO THE ENCODERS
+    LDrive1.setSelectedSensorPosition(0);
+    RDrive2.setSelectedSensorPosition(0);
+    LDrive3.setSelectedSensorPosition(0);
+    RDrive4.setSelectedSensorPosition(0);
 
-    robotMap.LDrive1.setSelectedSensorPosition(0);
-    robotMap.RDrive2.setSelectedSensorPosition(0);
-    robotMap.LDrive3.setSelectedSensorPosition(0);
-    robotMap.RDrive4.setSelectedSensorPosition(0);
+    
+
+
     RDrive2.setInverted(false);
     RDrive4.setInverted(false);
     LDrive1.setInverted(true);
@@ -66,6 +70,19 @@ public class robotMap {
     LDrive3.configFactoryDefault(30);
     RDrive2.configFactoryDefault(30);
     RDrive4.configFactoryDefault(30);
+
+    shooter.configFactoryDefault();
+    shooter.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    shooter.configPeakOutputForward(1);
+    shooter.configPeakOutputReverse(-1);
+    shooter.config_kF(0, 0);
+    shooter.config_kP(0, 0.6);
+    shooter.config_kI(0, 0.001);
+    shooter.config_kD(0, 0.1);
+    shooter.configAllowableClosedloopError(0, 0.01);
+
+    feeder.setInverted(true);
+
 
     RDrive2.configPeakOutputForward(CONST.driveSpeed, 30);
     RDrive2.configPeakOutputReverse(-CONST.driveSpeed, 30);
