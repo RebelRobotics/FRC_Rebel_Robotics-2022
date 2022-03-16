@@ -10,6 +10,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.SerialPort.WriteBufferMode;
 
 
 
@@ -39,6 +42,10 @@ public class robotMap {
   public static DoubleSolenoid hood = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
   //public static DoubleSolenoid hood = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
+  public static SerialPort jevois = new SerialPort(112500, Port.kUSB1);
+  public static int jTurnTo = 45;
+  public static double jDistance = 5.2;
+
   static void autoInit(boolean debug) {
     // ZERO THE ENCODERS
     LDrive1.setSelectedSensorPosition(0);
@@ -47,8 +54,6 @@ public class robotMap {
     RDrive4.setSelectedSensorPosition(0);
 
     
-
-
     RDrive2.setInverted(false);
     RDrive4.setInverted(false);
     LDrive1.setInverted(true);
@@ -62,7 +67,6 @@ public class robotMap {
       System.out.println("ENCODERS = " + (LDrive1.getSelectedSensorPosition()/RDrive2.getSelectedSensorPosition()));
       System.out.println("IMU get angle = " + imu.getAngle());
     }
-    
   }
   
   static void roboInit() {
@@ -99,6 +103,16 @@ public class robotMap {
     RDrive2.setSelectedSensorPosition(0);
   
     imu.calibrate();
+    
+
+
+    //jevois.reset();
+    ////jevois.setReadBufferSize(9);
+    //jevois.setWriteBufferMode(WriteBufferMode.kFlushWhenFull);
+    //jevois.setWriteBufferSize(1);
+    //jevois.flush();
+    //
+    //jevois.disableTermination();
 
     RDrive2.setInverted(true);
     RDrive4.setInverted(true);
@@ -106,3 +120,4 @@ public class robotMap {
     RDrive4.follow(robotMap.RDrive2);
   }
 }
+//tmp/hs_err_pid

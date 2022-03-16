@@ -15,7 +15,9 @@ public class manualShoot extends CommandBase{
     @Override
     public void initialize() {
         robotMap.shooter.set(ControlMode.PercentOutput, speed);
+        
     }
+
     @Override
     public void execute() {
         if (robotMap.shooter.getMotorOutputPercent()/speed > 0.95) {
