@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.Port;
-import edu.wpi.first.wpilibj.SerialPort.WriteBufferMode;
-
 
 
 public class robotMap {
@@ -40,9 +38,7 @@ public class robotMap {
   public static CANSparkMax feeder = new CANSparkMax(5, MotorType.kBrushless);
 
   public static DoubleSolenoid hood = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
-  //public static DoubleSolenoid hood = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
-
-  public static SerialPort jevois = new SerialPort(112500, Port.kUSB1);
+  public static SerialPort jevois = new SerialPort(9600, Port.kUSB);
   public static int jTurnTo = 45;
   public static double jDistance = 5.2;
 
@@ -106,13 +102,7 @@ public class robotMap {
     
 
 
-    //jevois.reset();
-    ////jevois.setReadBufferSize(9);
-    //jevois.setWriteBufferMode(WriteBufferMode.kFlushWhenFull);
-    //jevois.setWriteBufferSize(1);
-    //jevois.flush();
-    //
-    //jevois.disableTermination();
+    jevois.reset();
 
     RDrive2.setInverted(true);
     RDrive4.setInverted(true);

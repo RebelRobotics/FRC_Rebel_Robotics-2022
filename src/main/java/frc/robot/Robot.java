@@ -1,10 +1,9 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.Command;
-
-import java.nio.Buffer;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -15,6 +14,7 @@ import frc.robot.commands.goStraight;
 import frc.robot.commands.SUBSYS.manualShoot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.VideoMode.PixelFormat;
+import frc.robot.commands.vision;
 
 
 
@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
     routine1 route1 = new routine1();
     routine2 route2 = new routine2();
   manualShoot shoot = new manualShoot(0.3);
-  
+  vision _jevois = new vision(robotMap.jevois);
 
 
 
@@ -77,18 +77,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-  //final byte[] mbyte = new byte[] { (byte)0x730a};
-    if (robotMap.joystick.getRawButton(1)) {
-      //robotMap.jevois.writeString("s");
-      //System.out.println(robotMap.jevois.writeString("s"));
-      //System.out.println(mbyte);
-      //robotMap.jevois.write(mbyte, 1);
-      
-      //System.out.println("BYTES RECIVED = "+robotMap.jevois.getBytesReceived());
-    }
-    //System.out.println(robotMap.jevois.readString());
-    //robotMap.jevois.flush();
-    //System.out.println(parseJevois(jevois.readString())[0]);
+    _jevois.updateVision();
+    System.out.println(_jevois.getDistance()+" = DISTANCE  || "+_jevois.getAngle()+" = ANGLE  || "+_jevois.getTracking()+" = TRACKING");
+    System.out.println("RAW DATA == "+robotMap.jevois.readString());
   }
 
 
