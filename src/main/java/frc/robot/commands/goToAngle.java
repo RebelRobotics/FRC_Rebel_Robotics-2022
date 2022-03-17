@@ -3,57 +3,51 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.robotMap;
+import java.time.LocalTime;
 
 public class goToAngle extends CommandBase {
 
     private double Lspeed;
     private double Rspeed;
-    //private double angleSign;
     private double currentAngle;
-    //private double angleAjusted;
     private double error;
     private double ANGLE;
-    private double SPEED;
+    private double p;
     private double direction;
     private double Lrpm;
     private double Rrpm;
     private double avgRPM;
     
 
-    public goToAngle(double angle, double speed) {
+    public goToAngle(double angle, double P) {
         direction = (angle/Math.abs(angle));
-        Lspeed = -direction*speed;
-        Rspeed = direction*speed;
+        Lspeed = -direction*p;
+        Rspeed = direction*p;
         ANGLE = angle;
-        SPEED = speed;
-        //angleAjusted = Math.abs(angle)-(9);
+        p = P; // P should be about 12/180
     }
-    //@Override
-    //public void initialize() {
-    //  robotMap.imu.reset();
-    //}
     
     @Override
+    public void initialize() {
+      
+    }
+
+    @Override
     public void execute() {
+      LocalTime time = LocalTime.now();
+
       currentAngle = robotMap.imu.getAngle();
       error = ANGLE + currentAngle;
-
 
       Lrpm = robotMap.LDrive1.getSelectedSensorVelocity()*10*60/2048;
       Rrpm = robotMap.RDrive2.getSelectedSensorVelocity()*10*60/2048;
       avgRPM = Math.abs(Lrpm) + Math.abs(Rrpm);
 
-      Lspeed = -direction*SPEED*error;
-      Rspeed = direction*SPEED*error;
-      if (Math.abs(Lspeed) > 1) {Lspeed = Lspeed/Math.abs(Lspeed);}
-      if (Math.abs(Rspeed) > 1) {Rspeed = Rspeed/Math.abs(Rspeed);}
+      Lspeed = -direction+(error*p);
+      Rspeed = direction+(error*p);
       
-      if (Math.abs(error) < 12) {
-        System.out.println("slowing down");
-        Lspeed = Lspeed*0.1;
-        Rspeed = Rspeed*0.1;
-      }
-      
+      System.out.println();
+
       robotMap.RDrive2.set(ControlMode.PercentOutput, Rspeed);
       robotMap.LDrive1.set(ControlMode.PercentOutput, Lspeed);
     }

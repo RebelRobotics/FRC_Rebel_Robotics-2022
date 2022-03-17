@@ -72,7 +72,6 @@ public class Robot extends TimedRobot {
     robotMap.LDrive3.setInverted(false);
 
     robotMap.shooter.set(ControlMode.PercentOutput, 0.3);
-    
   }
 
   @Override

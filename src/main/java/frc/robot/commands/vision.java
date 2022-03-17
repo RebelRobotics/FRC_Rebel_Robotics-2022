@@ -78,7 +78,6 @@ public class vision {
         return haveCamera;
     }
 
-
     public void updateVision() {
         // Drain existing objects out of queue and use most recent
         JSONObject json = jsonResults.poll();
@@ -140,5 +139,4 @@ public class vision {
                 + c * getDistance()
                 + d;
     }
-
 }
