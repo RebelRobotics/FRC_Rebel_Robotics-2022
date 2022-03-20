@@ -30,6 +30,7 @@ public class vision {
                 () -> {
                     String buffer = "";
                     while (!shouldStop.get()) {
+                        //System.out.println("BUFFER == ||\n"+buffer+"\n||");
                         if (port.getBytesReceived() > 0) {
                             String temp = port.readString();
                             buffer += temp;
@@ -45,6 +46,7 @@ public class vision {
                                 buffer = "";
                             }
                         }
+                        
                         // Search for '}' and parse JSON
                         if (buffer.length() > 0) {
                             int index = buffer.indexOf('}', 0);
@@ -52,7 +54,7 @@ public class vision {
                                 String section = buffer.substring(0, index + 1);
                                 try {
                                     JSONObject json = (JSONObject) parser.parse(section);
-                                    if (jsonResults.size() > 16) {
+                                    if (jsonResults.size() > 45) {
                                         jsonResults.poll();
                                     }
                                     jsonResults.add(json);
@@ -101,11 +103,11 @@ public class vision {
                 distance = 0;
             }
 
-            Object tempAngle = json.get("DegToCtr");
+            Object tempAngle = json.get("DegT0Ctr");
             if (tempAngle != null) {
                 angle = Double.parseDouble(tempAngle.toString());
             } else {
-                angle = 0;
+                angle = 1;
             }
             Object tempTrk = json.get("Trk");
             if (tempTrk!=null) {
