@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.robotMap;
 import frc.robot.commands.SUBSYS.calcDer;
@@ -13,24 +14,22 @@ public class goToAngle extends CommandBase {
     public double error=0;
     private double ANGLE;
     private double p;
-    private double d;
-    private double direction;
-    private double Lrpm;
-    private double Rrpm;
-    private double avgRPM;
+    private double d; 
+    private int direction;
     private Thread runCalc;
     private calcDer calc_Derrivative;
+    private double i;
 
-    
 
-    public goToAngle(double angle, double P, double D) {
-        direction = (angle/Math.abs(angle));
+
+    public goToAngle(double angle, double P, double I, double D) {
+        direction = (int) (angle/Math.abs(angle));
         Lspeed = -direction*p;
         Rspeed = direction*p;
         ANGLE = angle;
-        p = P; // P should be about 12/180
-        d = D; //
-        
+        p = P;
+        d = D;
+        i = I;        
     }
     
     @Override
@@ -42,19 +41,17 @@ public class goToAngle extends CommandBase {
 
     @Override
     public void execute() {
-      
+      currentAngle = robotMap.imu.getAngle();
       error = ANGLE + currentAngle;
 
-      currentAngle = robotMap.imu.getAngle();
-    
-      Lrpm = robotMap.LDrive1.getSelectedSensorVelocity()*10*60/2048;
-      Rrpm = robotMap.RDrive2.getSelectedSensorVelocity()*10*60/2048;
-      avgRPM = Math.abs(Lrpm) + Math.abs(Rrpm);
-
-      Lspeed = -(direction+(error*p)+(calc_Derrivative.der*d));
-      Rspeed = direction+(error*p)+(calc_Derrivative.der*d);
+      Lspeed = ((error*p)+(calc_Derrivative.der*d)+(calc_Derrivative.I*i));
+      Rspeed = -1*((error*p)+(calc_Derrivative.der*d)+(calc_Derrivative.I*i));
       
-      System.out.println();
+      //System.out.println("I ---- "+calc_Derrivative.I*i);
+
+      //System.out.println("Lspeed = "+direction+" * (("+error+" * "+p+") + ");
+
+      //System.out.println("ERROR == "+error+" = "+ANGLE+" - "+currentAngle);
 
       robotMap.RDrive2.set(ControlMode.PercentOutput, Rspeed);
       robotMap.LDrive1.set(ControlMode.PercentOutput, Lspeed);
@@ -62,6 +59,7 @@ public class goToAngle extends CommandBase {
 
     @Override 
     public void end(boolean interrupted) {
+      System.out.println("#############################################################");
       calc_Derrivative.stop();
       robotMap.RDrive2.set(ControlMode.PercentOutput, 0);
       robotMap.LDrive1.set(ControlMode.PercentOutput, 0);
@@ -69,7 +67,7 @@ public class goToAngle extends CommandBase {
 
     @Override
     public boolean isFinished() {
-      return (Math.abs(error) <= 1 && avgRPM < 350);
+      return (Math.abs(error) <= 1);
     }
     
     public void getDebug() {
@@ -78,8 +76,7 @@ public class goToAngle extends CommandBase {
                          "Lspeed = "+Lspeed+"\n"+
                          "Rspeed = "+Rspeed+"\n"+
                          "DIRECTION = "+direction+"\n"+
-                         "FINISHED = "+this.isFinished()+"\n"+
-                         "avg RPM = "+avgRPM
+                         "FINISHED = "+this.isFinished()+"\n"
                          );
     }
 }

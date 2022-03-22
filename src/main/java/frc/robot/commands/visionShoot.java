@@ -12,7 +12,7 @@ public class visionShoot extends SequentialCommandGroup {
     public visionShoot(spinShooter spinShooter, spinIntake spinIntake) {
         addRequirements();
         addCommands(
-            new goToAngle(robotMap.jevois.getAngle(), 1, 2),
+            new goToAngle(robotMap.jevois.getAngle(), 1, 0.001, 2),
             new InstantCommand(spinShooter::spin, spinShooter),
             new WaitCommand(0.5),
             new InstantCommand(spinIntake::spin, spinIntake),

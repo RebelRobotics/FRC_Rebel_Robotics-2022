@@ -13,7 +13,7 @@ public class routine2 extends SequentialCommandGroup {
             new goStraight(48, -90),
             new goStraight(24, 0),
             new goStraight(24, 90),
-            new goToAngle(0, 1, 2)
+            new goToAngle(0, 1, 0.001, 2)
         );
     }
     

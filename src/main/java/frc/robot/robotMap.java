@@ -62,10 +62,11 @@ public class robotMap {
     static DoubleSolenoid intake = new DoubleSolenoid(0, PneumaticsModuleType.CTREPCM, 0, 1);
     static CANSparkMax intakeSpark = new CANSparkMax(15, MotorType.kBrushless);
 
-  //// JEVOIS 
-  public static SerialPort jevoisPort = new SerialPort(9600, Port.kUSB1);
-  public static vision jevois = new vision(jevoisPort);
+    //// JEVOIS 
+    public static SerialPort jevoisPort = new SerialPort(9600, Port.kUSB);
+    public static vision jevois = new vision(jevoisPort);
 
+    //// CLIMB ARM
     public static TalonFX climber = new TalonFX(9);
 
 
@@ -77,10 +78,10 @@ public class robotMap {
     RDrive4.setSelectedSensorPosition(0);
 
     // invert motors for autonomous
-    RDrive2.setInverted(false);
-    RDrive4.setInverted(false);
-    LDrive1.setInverted(true);
-    LDrive3.setInverted(true);
+    RDrive2.setInverted(true);
+    RDrive4.setInverted(true);
+    LDrive1.setInverted(false);
+    LDrive3.setInverted(false);
 
     // brake mode is so that the motors will stop and minimize coasting
     RDrive2.setNeutralMode(NeutralMode.Brake);
@@ -88,6 +89,15 @@ public class robotMap {
     RDrive4.setNeutralMode(NeutralMode.Brake);
     LDrive3.setNeutralMode(NeutralMode.Brake);
     
+    RDrive2.configPeakOutputForward(CONST.autoSpeed, 30);
+    RDrive2.configPeakOutputReverse(-CONST.autoSpeed, 30);
+    RDrive4.configPeakOutputForward(CONST.autoSpeed, 30);
+    RDrive4.configPeakOutputReverse(-CONST.autoSpeed, 30);
+    LDrive1.configPeakOutputForward(CONST.autoSpeed, 30);
+    LDrive1.configPeakOutputReverse(-CONST.autoSpeed, 30);
+    LDrive3.configPeakOutputForward(CONST.autoSpeed, 30);
+    LDrive3.configPeakOutputReverse(-CONST.autoSpeed, 30);
+
     // sets curret axis to 0
     imu.reset();
   }
@@ -133,17 +143,23 @@ public class robotMap {
     shooter.configAllowableClosedloopError(0, 0.01);
 
 
-
+    
 
     // CONFIG SHOOTER INTAKE (neo)
   
 
     // CALIBRATE GYRO 
     imu.calibrate();
+    imu.reset();
+    imu.setYawAxis(ADIS16470_IMU.IMUAxis.kX);
+    
     
 
     // RESET SERIAL PORT
     jevoisPort.reset();
+
+    // PID FOR CLIMB ARM
+    climber.config_kP(0, 0.4);
   }
 }
 
