@@ -66,6 +66,11 @@ public class robotMap {
   }
   
   static void roboInit() {
+<<<<<<< Updated upstream
+=======
+
+    ////// CONFIG DRIVE MOTORS //////
+>>>>>>> Stashed changes
     LDrive1.configFactoryDefault(30);
     LDrive3.configFactoryDefault(30);
     RDrive2.configFactoryDefault(30);

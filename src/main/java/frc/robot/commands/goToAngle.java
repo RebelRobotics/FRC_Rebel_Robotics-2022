@@ -49,7 +49,11 @@ public class goToAngle extends CommandBase {
       if (Math.abs(Rspeed) > 1) {Rspeed = Rspeed/Math.abs(Rspeed);}
       
       if (Math.abs(error) < 12) {
+<<<<<<< Updated upstream
         System.out.println("slowing down");
+=======
+        System.out.println("?????????  slowing down");
+>>>>>>> Stashed changes
         Lspeed = Lspeed*0.1;
         Rspeed = Rspeed*0.1;
       }
@@ -60,6 +64,10 @@ public class goToAngle extends CommandBase {
 
     @Override 
     public void end(boolean interrupted) {
+<<<<<<< Updated upstream
+=======
+      System.out.println("___________GO ANGLE FINISHED_______________");
+>>>>>>> Stashed changes
       robotMap.RDrive2.set(ControlMode.PercentOutput, 0);
       robotMap.LDrive1.set(ControlMode.PercentOutput, 0);
     }
